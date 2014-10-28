@@ -1,12 +1,16 @@
 #include "hc-sr04.h"
 
+/*
+ * These variables are not in the class becourse the Interrupt function needs to use them and it cant communicate with class members (static)
+ */
 unsigned long m_startTime;
 unsigned long m_runTime;
 bool m_run1;
 bool m_running;
 
-int Hcsr04::Init(int echoPin, int pulsPin)
+void Hcsr04::Init(int echoPin, int pulsPin)
 {
+	/* set/initolise all the variables */
 	m_echoPin = echoPin;
 	m_pulsPin = pulsPin;
     m_run1 = false;
@@ -14,13 +18,16 @@ int Hcsr04::Init(int echoPin, int pulsPin)
 	m_startTime = 0;
 	m_runTime = 0;
 	
+	/* 
+	 *	initalise the ports
+	 */
 	pinMode(m_pulsPin,OUTPUT);
 	pinMode(13,OUTPUT);
 	digitalWrite(13, LOW);
 	digitalWrite(m_pulsPin, LOW);
     attachInterrupt(0, Interrupt, CHANGE);
 }
-int Hcsr04::SendPuls()
+void Hcsr04::SendPuls()
 {
 	digitalWrite(m_pulsPin, HIGH);
 	delayMicroseconds(10);
@@ -28,7 +35,6 @@ int Hcsr04::SendPuls()
 	digitalWrite(13, HIGH);
     m_running = false;
     m_run1 = true;
-	return 0;
 
 }
 //int Hcsr04:IsFinished();
@@ -42,6 +48,9 @@ int Hcsr04::GetDistence()
 }
 void Hcsr04::Interrupt()
 {
+	/*
+	 *	There accure 2 interrups on the pin the first one when the measurement starts and the second one when it finishes.
+	 */
     if (m_run1)
     {
         m_startTime = micros();

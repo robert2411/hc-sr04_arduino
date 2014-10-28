@@ -1,4 +1,3 @@
 hc-sr04_arduino
 ===============
-
-arduino lib for the hc-sr04
+This is a basic library to communicate with the HC-SR04 on an arduino. It uses an interrupt.
